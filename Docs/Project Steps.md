@@ -24,3 +24,28 @@ pipenv install flask-sqlalchemy-serializer
 
 
 3. Migration
+In server folder
+
+install flask-migrate
+
+```bash
+pipenv install flask-migrate
+```
+
+## Step 1: Initialize migrations
+```bash
+flask db init
+```
+
+
+## Step 2: Create the 1st migration
+
+```bash
+flask db migrate -m "initial models"
+```
+
+## Step 3: Migrate to the database
+
+```bash
+flask db upgrade
+```
