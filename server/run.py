@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate
+from flask_restful import Api
+from flask_cors import CORS
 from models import db
 from config import Config
 
@@ -15,6 +17,9 @@ def create_app():
     return app
 
 app = create_app()
+
+api = Api(app)
+CORS(app)
 
 if __name__ == '__main__':
     app.run(debug=True)
