@@ -2,6 +2,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_cors import CORS
+
 from models import db
 from config import Config
 
@@ -20,6 +21,19 @@ app = create_app()
 
 api = Api(app)
 CORS(app)
+
+# -----------------------------------------------------------
+# ENDPOINTS
+
+# Home endpoint 
+from routes.home import Home
+api.add_resource(Home, '/')
+
+# Product endpoints
+from routes.products import Products
+
+api.add_resource(Products, '/products')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
