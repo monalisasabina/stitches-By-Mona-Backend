@@ -29,12 +29,19 @@ CORS(app)
 from routes.home import Home
 api.add_resource(Home, '/')
 
+
 # Product endpoints
 from routes.products import Products, Products_By_ID, ProductByCategory
 
 api.add_resource(Products, '/products')
 api.add_resource(Products_By_ID, '/products/<int:id>')  
 api.add_resource(ProductByCategory, '/products/category/<string:category>')
+
+
+# Customer endpoints
+from routes.customers import Customers
+
+api.add_resource(Customers, '/customers')   
 
 
 if __name__ == '__main__':
