@@ -30,10 +30,11 @@ from routes.home import Home
 api.add_resource(Home, '/')
 
 # Product endpoints
-from routes.products import Products, Products_By_ID
+from routes.products import Products, Products_By_ID, ProductByCategory
 
 api.add_resource(Products, '/products')
 api.add_resource(Products_By_ID, '/products/<int:id>')  
+api.add_resource(ProductByCategory, '/products/category/<string:category>')
 
 
 if __name__ == '__main__':

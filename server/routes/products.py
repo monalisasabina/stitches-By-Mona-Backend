@@ -38,3 +38,39 @@ class Products_By_ID(Resource):
         if not product:
             return {'error': 'Product not found'}, 404
         return product.to_dict(), 200
+    
+    # Updating a product by ID
+    def patch(self, id):
+        product = Product.query.get(id)
+
+        if not product:
+            return {'error': 'Product not found'}, 404
+
+        data = request.get_json()
+
+        if 'name'         in data: product.name         = data['name']
+        if 'description'  in data: product.description  = data['description']
+        if 'price'        in data: product.price        = data['price']
+        if 'stock'        in data: product.stock        = data['stock']
+        if 'image_url'    in data: product.image_url    = data['image_url']
+        if 'category'     in data: product.category     = data['category']
+        if 'is_available' in data: product.is_available = data['is_available']
+
+        db.session.commit()
+        return product.to_dict(), 200
+    
+    # Deleting a product by ID
+    def delete(self, id):
+        product = Product.query.get(id)
+        if not product:
+            return {'error': 'Product not found'}, 404
+
+        db.session.delete(product)
+        db.session.commit()
+        return {'message': f'{product.name} deleted successfully'}, 200
+    
+
+class ProductByCategory(Resource):
+    def get(self, category):
+        products = Product.query.filter_by(category=category).all()
+        return [p.to_dict() for p in products], 200
