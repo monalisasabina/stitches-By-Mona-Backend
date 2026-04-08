@@ -4,6 +4,7 @@ from models.product import Product
 from models.order import Order, OrderItem
 from models.custom_order import CustomOrder
 from datetime import datetime
+from werkzeug.security import generate_password_hash
 
 with app.app_context():
     # clear existing data
@@ -34,16 +35,20 @@ with app.app_context():
     # ── CUSTOMERS ─────────────────────────────────────────
     print("🌱 Seeding customers...")
     customers = [
-        Customer(firstname="Amara",   lastname="Odhiambo", email="amara@email.com",   phone="0712345678", delivery_address="Kilimani, Nairobi"),
-        Customer(firstname="Brian",   lastname="Kamau",    email="brian@email.com",   phone="0723456789", delivery_address="Westlands, Nairobi"),
-        Customer(firstname="Cynthia", lastname="Wanjiku",  email="cynthia@email.com", phone="0734567890", delivery_address="Kasarani, Nairobi"),
-        Customer(firstname="David",   lastname="Otieno",   email="david@email.com",   phone="0745678901", delivery_address="Langata, Nairobi"),
-        Customer(firstname="Esther",  lastname="Muthoni",  email="esther@email.com",  phone="0756789012", delivery_address="Karen, Nairobi"),
-        Customer(firstname="Felix",   lastname="Njoroge",  email="felix@email.com",   phone="0767890123", delivery_address="Eastleigh, Nairobi"),
-        Customer(firstname="Grace",   lastname="Achieng",  email="grace@email.com",   phone="0778901234", delivery_address="Ruaka, Nairobi"),
-        Customer(firstname="Hassan",  lastname="Mwangi",   email="hassan@email.com",  phone="0789012345", delivery_address="South B, Nairobi"),
-        Customer(firstname="Irene",   lastname="Chebet",   email="irene@email.com",   phone="0790123456", delivery_address="Lavington, Nairobi"),
-        Customer(firstname="James",   lastname="Kariuki",  email="james@email.com",   phone="0701234567", delivery_address="Embakasi, Nairobi"),
+        Customer(firstname="Amara",   lastname="Odhiambo", username="amara",   email="amara@email.com",   phone="0712345678", delivery_address="Kilimani, Nairobi",   password_hash=generate_password_hash("Amara123!"), is_deleted=False),
+        Customer(firstname="Brian",   lastname="Kamau",    username="brian",   email="brian@email.com",   phone="0723456789", delivery_address="Westlands, Nairobi",  password_hash=generate_password_hash("Brian123!"), is_deleted=False),
+        Customer(firstname="Cynthia", lastname="Wanjiku",  username="cynthia", email="cynthia@email.com", phone="0734567890", delivery_address="Kasarani, Nairobi",   password_hash=generate_password_hash("Cynthia123!"), is_deleted=False),
+        Customer(firstname="David",   lastname="Otieno",   username="david",   email="david@email.com",   phone="0745678901", delivery_address="Langata, Nairobi",    password_hash=generate_password_hash("David123!"), is_deleted=False),
+        Customer(firstname="Esther",  lastname="Muthoni",  username="esther",  email="esther@email.com",  phone="0756789012", delivery_address="Karen, Nairobi",      password_hash=generate_password_hash("Esther123!"), is_deleted=False),
+        Customer(firstname="Felix",   lastname="Njoroge",  username="felix",   email="felix@email.com",   phone="0767890123", delivery_address="Eastleigh, Nairobi",  password_hash=generate_password_hash("Felix123!"), is_deleted=False),
+        Customer(firstname="Grace",   lastname="Achieng",  username="grace",   email="grace@email.com",   phone="0778901234", delivery_address="Ruaka, Nairobi",      password_hash=generate_password_hash("Grace123!"), is_deleted=False),
+        Customer(firstname="Hassan",  lastname="Mwangi",   username="hassan",  email="hassan@email.com",  phone="0789012345", delivery_address="South B, Nairobi",    password_hash=generate_password_hash("Hassan123!"), is_deleted=False),
+        Customer(firstname="Irene",   lastname="Chebet",   username="irene",   email="irene@email.com",   phone="0790123456", delivery_address="Lavington, Nairobi",  password_hash=generate_password_hash("Irene123!"), is_deleted=False),
+        Customer(firstname="James",   lastname="Kariuki",  username="james",   email="james@email.com",   phone="0701234567", delivery_address="Embakasi, Nairobi",   password_hash=generate_password_hash("James123!"), is_deleted=False),
+
+        # Deleted customers (for testing soft delete)
+        Customer(firstname="Karen",   lastname="Njeri",    username="karen",   email="karen@email.com",   phone="0701234567", delivery_address="Embakasi, Nairobi",   password_hash=generate_password_hash("Karen123!"), is_deleted=True),
+        Customer(firstname="Leo",     lastname="Mugambi",   username="leo",     email="leo@email.com",     phone="0701234567", delivery_address="Embakasi, Nairobi",   password_hash=generate_password_hash("Leo123!"), is_deleted=True),
     ]
     db.session.add_all(customers)
     db.session.commit()

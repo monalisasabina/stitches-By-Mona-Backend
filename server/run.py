@@ -39,9 +39,10 @@ api.add_resource(ProductByCategory, '/products/category/<string:category>')
 
 
 # Customer endpoints
-from routes.customers import Customers
+from routes.customers import Customers, CustomerDetail
 
 api.add_resource(Customers, '/customers')   
+api.add_resource(CustomerDetail, '/customers/<int:id>')
 
 
 if __name__ == '__main__':

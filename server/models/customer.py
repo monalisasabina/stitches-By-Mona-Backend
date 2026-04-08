@@ -7,10 +7,15 @@ class Customer(db.Model):
     id               = db.Column(db.Integer, primary_key=True)
     firstname        = db.Column(db.String(50), nullable=False)
     lastname         = db.Column(db.String(50), nullable=False)
-    email            = db.Column(db.String(120), unique=True, nullable=False)
+    username        = db.Column(db.String(50), unique=True, nullable=True)  
+    email            = db.Column(db.String(120), unique=True, nullable=True)
     phone            = db.Column(db.String(20), nullable=True)
     delivery_address = db.Column(db.Text, nullable=True)
     created_at       = db.Column(db.DateTime, default=datetime.utcnow)
+    password_hash      = db.Column(db.String(128), nullable=True)  
+
+    # to check if customer is deleted
+    is_deleted       = db.Column(db.Boolean, default=False)
 
     # relationships
     orders        = db.relationship('Order', back_populates='customer', lazy=True)
@@ -21,6 +26,7 @@ class Customer(db.Model):
             'id':               self.id,
             'firstname':        self.firstname,
             'lastname':         self.lastname,
+            'username':         self.username,
             'email':            self.email,
             'phone':            self.phone,
             'delivery_address': self.delivery_address,
