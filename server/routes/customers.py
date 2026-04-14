@@ -53,7 +53,7 @@ class CustomerDetail(Resource):
         if not customer:
             return {'error': 'Customer not found'}, 404
         
-       
+    
         data = request.get_json()
 
         if 'firstname'        in data: customer.firstname        = data['firstname']

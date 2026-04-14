@@ -6,7 +6,8 @@ class Home(Resource):
             'message': 'Welcome to Stitches by Mona API 🧶',
             'available_endpoints' : [
                 '/products',
-                '/customers'
+                '/customers',
+                '/orders'
              ]
             
           

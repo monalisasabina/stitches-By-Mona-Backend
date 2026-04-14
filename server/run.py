@@ -45,5 +45,11 @@ api.add_resource(Customers, '/customers')
 api.add_resource(CustomerDetail, '/customers/<int:id>')
 
 
+# Order endpoints
+from routes.order import OrderList
+
+api.add_resource(OrderList, '/orders')
+
+
 if __name__ == '__main__':
     app.run(debug=True)

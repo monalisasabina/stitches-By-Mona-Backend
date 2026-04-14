@@ -1,6 +1,7 @@
 from models import db
 from datetime import datetime
 
+# Order is the receipt. It represents the entire purchase
 class Order(db.Model):
     __tablename__ = 'orders'
 
@@ -25,6 +26,7 @@ class Order(db.Model):
         }
 
 
+# OrderItem represents each individual product in the order, along with quantity.
 class OrderItem(db.Model):
     __tablename__ = 'order_items'
 
