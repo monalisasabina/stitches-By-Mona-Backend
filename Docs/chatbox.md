@@ -38,20 +38,20 @@ It combines rule-based automation with AI-driven adaptability (NLP/LLM), offerin
 
 ## 🧪 Testing Your Flask Chatbot with Postman
 
-1. Set Request Type
+#### 1. Set Request Type
 Method: POST
 URL:
 http://127.0.0.1:5000/chat
 
 
-2. Add Headers
+#### 2. Add Headers
 
 Go to the Headers tab and add:
 
 ```Content-Type: application/json```
 
 
-3. Add Request Body
+#### 3. Add Request Body
 
 Go to Body → raw → JSON and use:
 
@@ -61,13 +61,13 @@ Go to Body → raw → JSON and use:
 }
 ```
 
-4. Send Request
+#### 4. Send Request
 
 ```
 Click Send.
 ```
 
-5. Expected Response
+#### 5. Expected Response
 
 You should receive a response like:
 
@@ -77,7 +77,7 @@ You should receive a response like:
 }
 ```
 
-6. Test Multiple Inputs
+#### 6. Test Multiple Inputs
 
 Try different messages to verify chatbot behavior:
 
