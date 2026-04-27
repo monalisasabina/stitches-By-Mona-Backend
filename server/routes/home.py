@@ -7,7 +7,8 @@ class Home(Resource):
             'available_endpoints' : [
                 '/products',
                 '/customers',
-                '/orders'
+                '/orders',
+                '/custom_orders'
              ]
             
           

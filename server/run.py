@@ -50,6 +50,12 @@ from routes.order import OrderList
 
 api.add_resource(OrderList, '/orders')
 
+# Custom Order endpoints
+from routes.custom_order import CustomOrderDetail, CustomOrderList
+
+api.add_resource(CustomOrderList, '/custom_orders')
+api.add_resource(CustomOrderDetail, '/custom_orders/<int:id>')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
