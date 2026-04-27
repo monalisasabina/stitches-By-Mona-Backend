@@ -27,6 +27,7 @@ CORS(app)
 
 # Home endpoint 
 from routes.home import Home
+
 api.add_resource(Home, '/')
 
 
@@ -60,6 +61,8 @@ api.add_resource(CustomOrderDetail, '/custom_orders/<int:id>')
 from routes.chat import Chat
 
 api.add_resource(Chat, '/chat')
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
 
 
 if __name__ == '__main__':
