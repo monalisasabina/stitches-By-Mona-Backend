@@ -56,6 +56,11 @@ from routes.custom_order import CustomOrderDetail, CustomOrderList
 api.add_resource(CustomOrderList, '/custom_orders')
 api.add_resource(CustomOrderDetail, '/custom_orders/<int:id>')
 
+# Chatbot endpoint
+from routes.chat import Chat
+
+api.add_resource(Chat, '/chat')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
