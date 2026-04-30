@@ -3,6 +3,7 @@ from models.customer import Customer
 from models.product import Product
 from models.order import Order, OrderItem
 from models.custom_order import CustomOrder
+from models.admin import Admin
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 
@@ -51,6 +52,19 @@ with app.app_context():
         Customer(firstname="Leo",     lastname="Mugambi",   username="leo",     email="leo@email.com",     phone="0701234567", delivery_address="Embakasi, Nairobi",   password_hash=generate_password_hash("Leo123!"), is_deleted=True),
     ]
     db.session.add_all(customers)
+    db.session.commit()
+
+    # ── ADMINS ─────────────────────────────────────────
+    print("🌱 Seeding admins...")
+    admins = [
+        Admin(firstname="Amara",   lastname="Odhiambo", username="amara",   email="amara@email.com",    password_hash=generate_password_hash("Amara123!")),
+        Admin(firstname="Brian",   lastname="Kamau",    username="brian",   email="brian@email.com",    password_hash=generate_password_hash("Brian123!") ),
+        Admin(firstname="Cynthia", lastname="Wanjiku",  username="cynthia", email="cynthia@email.com",  password_hash=generate_password_hash("Cynthia123!") ),
+        Admin(firstname="David",   lastname="Otieno",   username="david",   email="david@email.com",    password_hash=generate_password_hash("David123!")),
+        Admin(firstname="Esther",  lastname="Muthoni",  username="esther",  email="esther@email.com",   password_hash=generate_password_hash("Esther123!")),
+
+    ]
+    db.session.add_all(admins)
     db.session.commit()
 
     # ── ORDERS ────────────────────────────────────────────

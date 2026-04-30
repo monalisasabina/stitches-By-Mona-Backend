@@ -13,17 +13,28 @@ class Admin(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     created_at    = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # setting the password by hashing it
     def set_password(self, password):
         self.password_hash = bcrypt.hashpw(
             password.encode('utf-8'),
             bcrypt.gensalt()
         ).decode('utf-8')
 
+    # Note:
+    # hashpw(): Hashes the password using the provided salt
+    # gensalt(): Generates a salt(random value)
+    # encode('utf-8'): Converts the password string to bytes, which is required by bcrypt
+    # decode('utf-8'): Converts the resulting hash back to a string for storage in the database
+
+    # checking the password by comparing the hash
     def check_password(self, password):
         return bcrypt.checkpw(
             password.encode('utf-8'),
             self.password_hash.encode('utf-8')
         )
+    
+    # checkpw(): Compares the provided password (after encoding) with the stored password hash (also encoded)
+
 
     def to_dict(self):
         return {
