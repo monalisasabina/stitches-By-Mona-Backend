@@ -2,6 +2,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 
 from models import db
 from config import Config
@@ -14,6 +15,8 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
+
+    JWTManager(app)
 
     return app
 
@@ -61,6 +64,17 @@ api.add_resource(CustomOrderDetail, '/custom_orders/<int:id>')
 from routes.chat import Chat
 
 api.add_resource(Chat, '/chat')
+
+
+# Auth routes
+# ___admin____
+from routes.auth_admin import AdminLogin, AdminRegister
+api.add_resource(AdminRegister, '/auth/admin/register')
+api.add_resource(AdminLogin, '/auth/admin/login')
+
+
+# __customer___
+from routes.auth_customer import CustomerLogin, CustomerRegister
 
 # ---------------------------------------------------------------------------------------------------------------------------------------
 

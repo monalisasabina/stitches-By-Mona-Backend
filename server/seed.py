@@ -1,3 +1,5 @@
+import os
+
 from run import app, db
 from models.customer import Customer
 from models.product import Product
@@ -7,6 +9,8 @@ from models.admin import Admin
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 
+
+
 with app.app_context():
     # clear existing data
     print("🌱 Clearing existing data...")
@@ -15,6 +19,7 @@ with app.app_context():
     CustomOrder.query.delete()
     Customer.query.delete()
     Product.query.delete()
+    Admin.query.delete()
 
     # ── PRODUCTS ──────────────────────────────────────────
     print("🌱 Seeding products...")
@@ -57,14 +62,27 @@ with app.app_context():
     # ── ADMINS ─────────────────────────────────────────
     print("🌱 Seeding admins...")
     admins = [
-        Admin(firstname="Amara",   lastname="Odhiambo", username="amara",   email="amara@email.com",    password_hash=generate_password_hash("Amara123!")),
-        Admin(firstname="Brian",   lastname="Kamau",    username="brian",   email="brian@email.com",    password_hash=generate_password_hash("Brian123!") ),
-        Admin(firstname="Cynthia", lastname="Wanjiku",  username="cynthia", email="cynthia@email.com",  password_hash=generate_password_hash("Cynthia123!") ),
-        Admin(firstname="David",   lastname="Otieno",   username="david",   email="david@email.com",    password_hash=generate_password_hash("David123!")),
-        Admin(firstname="Esther",  lastname="Muthoni",  username="esther",  email="esther@email.com",   password_hash=generate_password_hash("Esther123!")),
+        Admin(firstname="Amara",   lastname="Odhiambo", username="amara",   email="amara@email.com",    password_hash=generate_password_hash("Amara123!"),  is_super_admin=False),
+        Admin(firstname="Brian",   lastname="Kamau",    username="brian",   email="brian@email.com",    password_hash=generate_password_hash("Brian123!"),  is_super_admin=False),
+        Admin(firstname="Cynthia", lastname="Wanjiku",  username="cynthia", email="cynthia@email.com",  password_hash=generate_password_hash("Cynthia123!"),  is_super_admin=False),
+        Admin(firstname="David",   lastname="Otieno",   username="david",   email="david@email.com",    password_hash=generate_password_hash("David123!"),  is_super_admin=False),
+        Admin(firstname="Esther",  lastname="Muthoni",  username="esther",  email="esther@email.com",   password_hash=generate_password_hash("Esther123!"),  is_super_admin=False),
 
     ]
     db.session.add_all(admins)
+    db.session.commit()
+
+    #__SUPER_ADMIN____
+    print("🌱 Seeding super admin...")
+    admin = Admin(
+                  firstname="Mona", 
+                  lastname="Sabina", 
+                  username="mona", 
+                  email="monalisa@stitchesbymona.com",
+                  is_super_admin=True, 
+                )
+    admin.set_password(os.getenv('ADMIN_PASSWORD'))
+    db.session.add(admin)
     db.session.commit()
 
     # ── ORDERS ────────────────────────────────────────────

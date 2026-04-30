@@ -12,6 +12,7 @@ class Admin(db.Model):
     email         = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     created_at    = db.Column(db.DateTime, default=datetime.utcnow)
+    is_super_admin = db.Column(db.Boolean, default=False)
 
     # setting the password by hashing it
     def set_password(self, password):
@@ -44,5 +45,6 @@ class Admin(db.Model):
             'username':   self.username,
             'email':      self.email,
             'created_at': self.created_at.isoformat(),
+            'is_super_admin': self.is_super_admin
             # password_hash intentionally excluded
         }
