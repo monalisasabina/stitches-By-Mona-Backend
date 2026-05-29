@@ -2,43 +2,44 @@ from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from datetime import timedelta
-from models.admin import Admin
+from models.customer import Customer
 
-class AdminLogin(Resource):
+
+class CustomerLogin(Resource):
     def post(self):
         data = request.get_json()
 
         if not data.get('email') or not data.get('password'):
             return {'error': 'email and password are required'}, 400
 
-        admin = Admin.query.filter_by(email=data.get('email')).first()
+        customer = Customer.query.filter_by(email=data.get('email')).first()
 
-        if not admin or not admin.check_password(data.get('password')):
+        if not customer or not customer.check_password(data.get('password')):
             return {'error': 'invalid email or password'}, 401
 
-        # shorter expiry for admin — 8 hours
+        # shorter expiry for customer — 8 hours
         token = create_access_token(
-            identity={'id': admin.id, 'role': 'admin'},
+            identity={'id': customer.id, 'role': 'customer'},
             expires_delta=timedelta(hours=8)
         )
 
         return {
-            'message': 'Admin login successful',
+            'message': 'Customer login successful',
             'token':   token,
-            'admin':   admin.to_dict()
+            'customer':   customer.to_dict()
         }, 200
 
 
-class AdminProfile(Resource):
+class CustomerProfile(Resource):
     @jwt_required()
     def get(self):
         identity = get_jwt_identity()
 
-        if identity['role'] != 'admin':
+        if identity['role'] != 'customer':
             return {'error': 'Unauthorized'}, 403
 
-        admin = Admin.query.get(identity['id'])
-        if not admin:
-            return {'error': 'Admin not found'}, 404
+        customer = Customer.query.get(identity['id'])
+        if not customer:
+            return {'error': 'Customer not found'}, 404
 
-        return admin.to_dict(), 200
+        return customer.to_dict(), 200

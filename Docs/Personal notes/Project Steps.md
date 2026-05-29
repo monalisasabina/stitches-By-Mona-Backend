@@ -10,7 +10,7 @@ pipenv shell
 2. Configure ```FLASK_APP``` and ```FLASK_RUN_PORT```
 
 ```bash
-export FLASK_APP=app.py
+export FLASK_APP=run.py
 export FLASK_RUN_PORT=5555
 ```
 

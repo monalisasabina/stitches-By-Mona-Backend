@@ -39,3 +39,8 @@ FLASK_ENV=development
 python3 -c "import secrets; print(secrets.token_hex(32))"
 ```
 
+## 5. Generate 8 random codes
+
+```bash
+python3 -c "import secrets, string; print(''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(8)))"
+```
