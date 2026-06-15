@@ -10,7 +10,6 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash
 
 
-
 with app.app_context():
     # clear existing data
     print("🌱 Clearing existing data...")

@@ -8,7 +8,8 @@ class Home(Resource):
                 '/products',
                 '/customers',
                 '/orders',
-                '/custom_orders'
+                '/custom_orders',
+                '/auth/admin/profile',
              ]
             
           

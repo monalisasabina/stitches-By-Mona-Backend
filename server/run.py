@@ -72,9 +72,10 @@ def create_app():
 
     # Auth routes
     # ___admin____
-    from routes.auth_admin import AdminLogin, AdminRegister
+    from routes.auth_admin import AdminLogin, AdminRegister, AdminProfile
     api.add_resource(AdminRegister, '/auth/admin/register')
     api.add_resource(AdminLogin, '/auth/admin/login')
+    api.add_resource(AdminProfile, '/auth/admin/profile')
 
 
     # __customer___
@@ -86,9 +87,6 @@ def create_app():
     return app
 
 app = create_app()
-
-
-
 
 
 

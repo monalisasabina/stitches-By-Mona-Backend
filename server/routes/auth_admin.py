@@ -16,6 +16,7 @@ class AdminRegister(Resource):
 
         # check if the logged in admin is super admin
         logged_in_admin = Admin.query.get(identity['id'])
+
         if not logged_in_admin.is_super_admin:
             return {'error': 'Only the super admin can create new admins'}, 403
 
@@ -27,6 +28,12 @@ class AdminRegister(Resource):
             return {'error': 'email is required'}, 400
         if not data.get('password'):
             return {'error': 'password is required'}, 400
+        if not data.get('username'):
+            return {'error': 'username is required'}, 400
+        
+        # To avoid duplicate  username
+        if Admin.query.filter_by(username=data.get('username')).first():
+            return {'error': 'username already registered'}, 409
 
         # check if email already exists
         if Admin.query.filter_by(email=data.get('email')).first():
@@ -35,6 +42,7 @@ class AdminRegister(Resource):
         new_admin = Admin(
             firstname      = data.get('firstname'),
             lastname       = data.get('lastname'),
+            username       = data.get('username'),
             email          = data.get('email'),
             is_super_admin = False,  # staff are never super admin
         )
