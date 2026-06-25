@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from run import app
-from models import db
+from server.scripts import db
 from models.admin import Admin
 
 load_dotenv()   

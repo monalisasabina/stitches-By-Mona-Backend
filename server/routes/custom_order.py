@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from models import db
+from server.scripts import db
 from models.custom_order import CustomOrder
 from models.customer import Customer
 from datetime import datetime

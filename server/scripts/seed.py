@@ -71,18 +71,6 @@ with app.app_context():
     db.session.add_all(admins)
     db.session.commit()
 
-    #__SUPER_ADMIN____
-    print("🌱 Seeding super admin...")
-    admin = Admin(
-                  firstname="Mona", 
-                  lastname="Sabina", 
-                  username="mona", 
-                  email="monalisa@stitchesbymona.com",
-                  is_super_admin=True, 
-                )
-    admin.set_password(os.getenv('ADMIN_PASSWORD'))
-    db.session.add(admin)
-    db.session.commit()
 
     # ── ORDERS ────────────────────────────────────────────
     print("🌱 Seeding orders...")

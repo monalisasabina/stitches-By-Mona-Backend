@@ -4,7 +4,7 @@ from flask_restful import Api
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 
-from models import db
+from server.scripts import db
 from config import Config
 
 migrate = Migrate()
