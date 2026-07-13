@@ -1,4 +1,4 @@
-from server.scripts import db
+from server.models import db
 from datetime import datetime
 import bcrypt
 

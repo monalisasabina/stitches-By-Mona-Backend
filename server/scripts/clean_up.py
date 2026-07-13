@@ -1,5 +1,5 @@
 from run import app
-from server.scripts import db
+from server.models import db
 from models.customer import Customer
 from models.product import Product
 from models.order import Order, OrderItem
