@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from datetime import timedelta
-from server.models import db
+from models import db
 from models.admin import Admin
 
 class AdminRegister(Resource):

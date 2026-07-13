@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from server.models import db
+from models import db
 from models.order import Order, OrderItem
 from models.product import Product
 from models.customer import Customer

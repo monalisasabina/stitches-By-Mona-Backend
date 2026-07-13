@@ -1,4 +1,4 @@
-from server.models import db
+from models import db
 from datetime import datetime
 
 # Order is the receipt. It represents the entire purchase
