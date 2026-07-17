@@ -18,7 +18,7 @@ with app.app_context():
     CustomOrder.query.delete()
     Customer.query.delete()
     Product.query.delete()
-    Admin.query.delete()
+    Admin.query.filter(Admin.is_super_admin == False).delete() 
 
     # ── PRODUCTS ──────────────────────────────────────────
     print("🌱 Seeding products...")
