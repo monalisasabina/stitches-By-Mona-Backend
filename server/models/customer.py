@@ -39,7 +39,7 @@ class Customer(db.Model):
             self.password_hash.encode('utf-8')
         )
 
-    
+    # Converting customer object to dictionary for JSON response
     def to_dict(self):
         return {
             'id':               self.id,
@@ -50,4 +50,5 @@ class Customer(db.Model):
             'phone':            self.phone,
             'delivery_address': self.delivery_address,
             'created_at':       self.created_at.isoformat(),
+            'is_deleted':       self.is_deleted
         }

@@ -51,10 +51,11 @@ def create_app():
 
 
     # Customer endpoints
-    from routes.customers import Customers, CustomerDetail
+    from routes.customers import Customers, CustomerDetail, DeletedCustomers, RestoreCustomer
     api.add_resource(Customers, '/customers')   
     api.add_resource(CustomerDetail, '/customers/<int:id>')
-
+    api.add_resource(DeletedCustomers, '/customers/deleted')  # Endpoint to get deleted customers
+    api.add_resource(RestoreCustomer, '/customers/restore/<int:id>')  # Endpoint to restore a deleted customer
 
     # Order endpoints
     from routes.order import OrderList

@@ -10,6 +10,7 @@ class Home(Resource):
                 '/orders',
                 '/custom_orders',
                 '/auth/admin/profile',
+                '/auth/customer/profile',
              ]
             
           
