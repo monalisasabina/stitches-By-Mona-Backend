@@ -54,8 +54,13 @@ def create_app():
     from routes.customers import Customers, CustomerDetail, DeletedCustomers, RestoreCustomer
     api.add_resource(Customers, '/customers')   
     api.add_resource(CustomerDetail, '/customers/<int:id>')
-    api.add_resource(DeletedCustomers, '/customers/deleted')  # Endpoint to get deleted customers
+    api.add_resource(DeletedCustomers, '/customers/deleted')  # Endpoint to get deleted customers list
     api.add_resource(RestoreCustomer, '/customers/restore/<int:id>')  # Endpoint to restore a deleted customer
+
+    # Admin endpoints
+    from routes.admin import Admins, AdminDetail
+    api.add_resource(Admins, '/admins')
+    api.add_resource(AdminDetail, '/admins/<int:id>')
 
     # Order endpoints
     from routes.order import OrderList
@@ -79,10 +84,10 @@ def create_app():
     api.add_resource(AdminProfile, '/auth/admin/profile')
 
 
-    # __customer___
-    from routes.auth_customer import CustomerLogin, CustomerProfile
-    api.add_resource(CustomerLogin, '/auth/customer/login')
-    api.add_resource(CustomerProfile, '/auth/customer/profile')
+    # __customer___    Future use: Uncomment these lines to enable customer authentication routes
+    # from routes.auth_customer import CustomerLogin, CustomerProfile
+    # api.add_resource(CustomerLogin, '/auth/customer/login')
+    # api.add_resource(CustomerProfile, '/auth/customer/profile')
 
 
     return app

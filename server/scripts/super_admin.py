@@ -1,3 +1,7 @@
+# super_admin.py: ensures that a super admin is created when the application starts, if one does not already exist. It reads the super admin's details from environment variables and uses the Admin model to create and store the super admin in the database.
+
+# --------------------------------------------------------------------------------------------------------------
+
 import os
 from dotenv import load_dotenv
 from run import app
@@ -8,7 +12,7 @@ load_dotenv()
 
 def create_super_admin():
      
-     #   
+     # with app.app_context(): is used to ensure that the code runs within the application context, which is necessary for database operations in Flask. 
      with app.app_context():
           
         # check if super admin already exists

@@ -45,6 +45,6 @@ class Admin(db.Model):
             'username':   self.username,
             'email':      self.email,
             'created_at': self.created_at.isoformat(),
-            'is_super_admin': self.is_super_admin
+            # 'is_super_admin': self.is_super_admin
             # password_hash intentionally excluded
         }
