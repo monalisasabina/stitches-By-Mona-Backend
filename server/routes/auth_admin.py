@@ -61,10 +61,15 @@ class AdminLogin(Resource):
     def post(self):
         data = request.get_json()
 
-        if not data.get('email') or not data.get('password'):
-            return {'error': 'email and password are required'}, 400
+        identifier = data.get('identifier')  # email or username
+        password = data.get('password')
 
-        admin = Admin.query.filter_by(email=data.get('email')).first()
+        if not identifier or not password:
+            return {'error': 'identifier and password are required'}, 400
+
+        admin = Admin.query.filter(
+            (Admin.email == identifier) | (Admin.username == identifier)
+        ).first()
 
         if not admin or not admin.check_password(data.get('password')):
             return {'error': 'invalid email or password'}, 401
