@@ -7,6 +7,7 @@ from flask_jwt_extended import JWTManager
 from models import db
 from config import Config
 
+
 migrate = Migrate()
 BLOCKLIST = set()
 
@@ -17,6 +18,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     CORS(app)
+    
 
     # Activating JWT authentication
     jwt = JWTManager(app)
@@ -78,10 +80,11 @@ def create_app():
 
     # Auth routes
     # ___admin____
-    from routes.auth_admin import AdminLogin, AdminRegister, AdminProfile
+    from routes.auth_admin import AdminLogin, AdminRegister, AdminProfile, AdminLogout
     api.add_resource(AdminRegister, '/auth/admin/register')
     api.add_resource(AdminLogin, '/auth/admin/login')
     api.add_resource(AdminProfile, '/auth/admin/profile')
+    api.add_resource(AdminLogout, '/auth/admin/logout')
 
 
     # __customer___    Future use: Uncomment these lines to enable customer authentication routes

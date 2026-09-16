@@ -1,9 +1,11 @@
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
 from datetime import timedelta
 from models import db
 from models.admin import Admin
+
+BLOCKLIST = set()  # This should be imported from your main application context where it's defined
 
 class AdminRegister(Resource):
     @jwt_required()
@@ -85,7 +87,7 @@ class AdminLogin(Resource):
 
         return {
             'message': 'Admin login successful',
-            'token':   token,
+            # 'token':   token,
             'admin':   admin.to_dict()
         }, 200
 
@@ -103,3 +105,11 @@ class AdminProfile(Resource):
             return {'error': 'Admin not found'}, 404
 
         return admin.to_dict(), 200
+
+
+class AdminLogout(Resource):
+    @jwt_required()
+    def post(self):
+        jti = get_jwt()['jti']  # Get the unique identifier for the JWT
+        BLOCKLIST.add(jti)  # Add the jti to the blocklist to revoke the token
+        return {'message': 'Admin logged out successfully'}, 200
