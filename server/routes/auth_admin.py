@@ -87,7 +87,7 @@ class AdminLogin(Resource):
 
         return {
             'message': 'Admin login successful',
-            # 'token':   token,
+            'token':   token,
             'admin':   admin.to_dict()
         }, 200
 
