@@ -13,8 +13,12 @@ class Admins(Resource):
 
 
 class AdminDetail(Resource):
+
+    # Getting an admin
     def get(self, id):
         admin = Admin.query.get(id)
         if not admin:
             return {'error': 'Admin not found'}, 404
         return admin.to_dict(), 200
+
+    

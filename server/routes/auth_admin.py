@@ -77,17 +77,17 @@ class AdminLogin(Resource):
             return {'error': 'invalid email or password'}, 401
 
         token = create_access_token(
-            identity={
-                'id':             admin.id,
-                'role':           'admin',
-                'is_super_admin': admin.is_super_admin
-            },
+            identity=str(admin.id),   # just the ID
+            additional_claims={
+            "role": "admin",
+            "is_super_admin": admin.is_super_admin
+            },  
             expires_delta=timedelta(hours=8)
         )
 
         return {
             'message': 'Admin login successful',
-            'token':   token,
+            'token':   token,       
             'admin':   admin.to_dict()
         }, 200
 
@@ -105,6 +105,52 @@ class AdminProfile(Resource):
             return {'error': 'Admin not found'}, 404
 
         return admin.to_dict(), 200
+
+class AdminUpdate(Resource):
+    @jwt_required()
+
+    # Updating an admin
+    def patch(self, id):
+
+        admin_id = get_jwt_identity() # Get the logged-in admin's ID from the JWT
+        if not admin_id:
+            return {'error': 'Unauthorized'}, 403
+
+        admin = Admin.query.filter_by(id=id).first()
+    
+        if not admin:
+            return {'error': 'Admin not found'}, 404
+    
+    
+        data = request.get_json()
+    
+        if 'firstname'        in data: admin.firstname        = data['firstname']
+        if 'lastname'         in data: admin.lastname         = data['lastname']
+    
+        # username
+        if 'username'         in data: 
+    
+            # checking if username exists for another admin
+            existing_username = Admin.query.filter_by(username=data['username']).first()
+            if existing_username and existing_username.id != id:
+                return {'error': 'An admin with that username already exists'}, 409
+    
+            admin.username         = data['username']
+    
+        # email
+        if 'email'            in data: 
+    
+            # checking if email exists for another customer
+            existing_email = Admin.query.filter_by(email=data['email']).first()
+            if existing_email and existing_email.id != id:
+                return {'error': 'An admin with that email already exists'}, 409
+    
+            admin.email            = data['email']
+    
+        db.session.commit()
+    
+        return admin.to_dict(), 200
+
 
 
 class AdminLogout(Resource):
