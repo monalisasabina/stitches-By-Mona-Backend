@@ -112,8 +112,8 @@ class AdminUpdate(Resource):
     # Updating an admin
     def patch(self, id):
 
-        admin_id = get_jwt_identity() # Get the logged-in admin's ID from the JWT
-        if not admin_id:
+        identity = get_jwt_identity() # Get the logged-in admin's ID from the JWT
+        if not identity:
             return {'error': 'Unauthorized'}, 403
 
         admin = Admin.query.filter_by(id=id).first()
@@ -154,25 +154,45 @@ class AdminUpdate(Resource):
 
 class AdminChangePassword(Resource):
     @jwt_required()
-    def patch(self, id):
-        admin_id = get_jwt_identity()
+    def patch(self):
 
-        if admin_id['role'] != 'admin':
-            return {'error': 'Unauthorized'}, 403
+        # Get the logged-in admin's identity from the JWT
+        claims = get_jwt()
 
-        admin = Admin.query.filter_by(id=id).first()
+        if claims['role'] != 'admin':
+           return {'error': 'Unauthorized'}, 403
+
+        admin_id = get_jwt_identity()  # Get the logged-in admin's ID from the JWT
+
+        admin = Admin.query.filter_by(id=admin_id).first()
+
         if not admin:
             return {'error': 'Admin not found'}, 404
 
         data = request.get_json()
+
         old_password = data.get('old_password')
         new_password = data.get('new_password')
 
+        # checks if the old password is there
         if not old_password:
             return {'error': 'old_password is required'}, 400
 
+        # checks if the new password is there
+        if not new_password:
+            return {'error': 'new_password is required'}, 400
+
+        # checks if the old password is correct
         if not admin.check_password(old_password):
             return {'error': 'Old password is incorrect'}, 401
+
+        # checks if the new password is different from the old password
+        if admin.check_password(new_password):
+            return {'error': 'New password cannot be the same as the old password'}, 400
+        
+        # checks if the new password is at least 8 characters long
+        if len(new_password) < 8:
+            return {'error': 'New password must be at least 8 characters long'}, 400
 
         admin.set_password(new_password)
         db.session.commit()

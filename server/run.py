@@ -86,7 +86,7 @@ def create_app():
     api.add_resource(AdminProfile, '/auth/admin/profile')
     api.add_resource(AdminLogout, '/auth/admin/logout')
     api.add_resource(AdminUpdate, '/auth/admin/update/<int:id>')
-    api.add_resource(AdminChangePassword, '/auth/admin/change_password/<int:id>')
+    api.add_resource(AdminChangePassword, '/auth/admin/change-password')
 
 
     # __customer___    Future use: Uncomment these lines to enable customer authentication routes
