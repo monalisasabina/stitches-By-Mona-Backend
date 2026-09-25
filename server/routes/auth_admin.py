@@ -150,6 +150,34 @@ class AdminUpdate(Resource):
         db.session.commit()
     
         return admin.to_dict(), 200
+    
+
+class AdminChangePassword(Resource):
+    @jwt_required()
+    def patch(self, id):
+        admin_id = get_jwt_identity()
+
+        if admin_id['role'] != 'admin':
+            return {'error': 'Unauthorized'}, 403
+
+        admin = Admin.query.filter_by(id=id).first()
+        if not admin:
+            return {'error': 'Admin not found'}, 404
+
+        data = request.get_json()
+        old_password = data.get('old_password')
+        new_password = data.get('new_password')
+
+        if not old_password:
+            return {'error': 'old_password is required'}, 400
+
+        if not admin.check_password(old_password):
+            return {'error': 'Old password is incorrect'}, 401
+
+        admin.set_password(new_password)
+        db.session.commit()
+
+        return {'message': 'Password changed successfully'}, 200
 
 
 
