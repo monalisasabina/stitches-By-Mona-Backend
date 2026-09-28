@@ -4,6 +4,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from datetime import timedelta
 from models import db
 from models.admin import Admin
+import re
 
 BLOCKLIST = set()  # This should be imported from your main application context where it's defined
 
@@ -12,34 +13,76 @@ class AdminRegister(Resource):
     def post(self):
         identity = get_jwt_identity()
 
+        claims = get_jwt()
+
+        # Ensuring the JWT belongs to an admin
+        if claims.get('role')  != 'admin':
+            return {"error": "Unauthorized"},403
+
+        # Finding logged in admin
+        logged_in_admin = Admin.query.filter_by(id=identity).first()
+
+        if not logged_in_admin:
+            return {'error': 'Admin not found'},404
+
         # only super admin can create other admins
-        if identity['role'] != 'admin':
-            return {'error': 'Unauthorized'}, 403
-
         # check if the logged in admin is super admin
-        logged_in_admin = Admin.query.get(identity['id'])
-
         if not logged_in_admin.is_super_admin:
             return {'error': 'Only the super admin can create new admins'}, 403
 
         data = request.get_json()
 
-        if not data.get('firstname') or not data.get('lastname'):
-            return {'error': 'firstname and lastname are required'}, 400
-        if not data.get('email'):
-            return {'error': 'email is required'}, 400
-        if not data.get('password'):
-            return {'error': 'password is required'}, 400
-        if not data.get('username'):
-            return {'error': 'username is required'}, 400
-        
-        # To avoid duplicate  username
-        if Admin.query.filter_by(username=data.get('username')).first():
-            return {'error': 'username already registered'}, 409
+        firstname = data.get('firstname')
+        lastname = data.get('lastname')
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
 
-        # check if email already exists
-        if Admin.query.filter_by(email=data.get('email')).first():
-            return {'error': 'email already registered'}, 409
+        # Required fields
+        if not firstname or not lastname:
+            return {
+                'error': 'firstname and lastname are required'
+            }, 400
+
+        if not email:
+            return {
+                'error': 'email is required'
+            }, 400
+
+        if not username:
+            return {
+                'error': 'username is required'
+            }, 400
+
+        if not password:
+            return {
+                'error': 'password is required'
+            }, 400
+
+        # Check for duplicate username
+        if Admin.query.filter_by(username=username).first():
+            return {
+                'error': 'username already registered'
+            }, 409
+
+        # Check for duplicate email
+        if Admin.query.filter_by(email=email).first():
+            return {
+                'error': 'email already registered'
+            }, 409
+
+
+        # Checking password length
+        if len(password) <8:
+            return{
+                'error': 'Password must be at least 8 characters long'
+            }, 400
+
+        # Checking special characters on password
+        if not re.search(r'[^A-Za-z0-9]', password):
+            return {
+                'error': 'Password must contain at least one special character'
+            }, 400
 
         new_admin = Admin(
             firstname      = data.get('firstname'),
@@ -73,7 +116,7 @@ class AdminLogin(Resource):
             (Admin.email == identifier) | (Admin.username == identifier)
         ).first()
 
-        if not admin or not admin.check_password(data.get('password')):
+        if not admin or not admin.check_password(password):
             return {'error': 'invalid email or password'}, 401
 
         token = create_access_token(
@@ -103,7 +146,7 @@ class AdminCheckSession(Resource):
         claims = get_jwt()
 
         # Checking if the role in claims is 'admin'
-        if claims['role'] != 'admin':
+        if claims.get('role') != 'admin':
             return {'error': 'Unauthorized'}, 403
 
         
@@ -123,10 +166,13 @@ class AdminProfile(Resource):
     def get(self):
         identity = get_jwt_identity()
 
-        if identity['role'] != 'admin':
+        claims = get_jwt()
+
+        if claims.get('role') != 'admin':
             return {'error': 'Unauthorized'}, 403
 
-        admin = Admin.query.get(identity['id'])
+        admin = Admin.query.filter_by(id=identity).first()
+
         if not admin:
             return {'error': 'Admin not found'}, 404
 
@@ -136,22 +182,29 @@ class AdminUpdate(Resource):
     @jwt_required()
 
     # Updating an admin
-    def patch(self, id):
+    def patch(self):
 
-        identity = get_jwt_identity() # Get the logged-in admin's ID from the JWT
-        if not identity:
+        # Get the logged-in admin's ID from the JWT
+        admin_id = get_jwt_identity() 
+
+        claims = get_jwt()
+
+        if claims.get('role') != 'admin':
             return {'error': 'Unauthorized'}, 403
 
-        admin = Admin.query.filter_by(id=id).first()
+        admin = Admin.query.filter_by(id=admin-id).first()
     
         if not admin:
             return {'error': 'Admin not found'}, 404
     
     
-        data = request.get_json()
+        data = request.get_json() or {}
     
-        if 'firstname'        in data: admin.firstname        = data['firstname']
-        if 'lastname'         in data: admin.lastname         = data['lastname']
+        if 'firstname'        in data: 
+            admin.firstname        = data['firstname']
+
+        if 'lastname'         in data:
+            admin.lastname         = data['lastname']
     
         # username
         if 'username'         in data: 
@@ -195,7 +248,7 @@ class AdminChangePassword(Resource):
         if not admin:
             return {'error': 'Admin not found'}, 404
 
-        data = request.get_json()
+        data = request.get_json() or {}
 
         old_password = data.get('old_password')
         new_password = data.get('new_password')
