@@ -80,9 +80,10 @@ def create_app():
 
     # Auth routes
     # ___admin____
-    from routes.auth_admin import AdminLogin, AdminRegister, AdminProfile, AdminLogout, AdminUpdate, AdminChangePassword
+    from routes.auth_admin import AdminLogin, AdminRegister, AdminProfile, AdminLogout, AdminUpdate, AdminChangePassword, AdminCheckSession
     api.add_resource(AdminRegister, '/auth/admin/register')
     api.add_resource(AdminLogin, '/auth/admin/login')
+    api.add_resource(AdminCheckSession, '/auth/admin/check-session')
     api.add_resource(AdminProfile, '/auth/admin/profile')
     api.add_resource(AdminLogout, '/auth/admin/logout')
     api.add_resource(AdminUpdate, '/auth/admin/update/<int:id>')

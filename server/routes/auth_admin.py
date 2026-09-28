@@ -92,6 +92,32 @@ class AdminLogin(Resource):
         }, 200
 
 
+class AdminCheckSession(Resource):
+    @jwt_required()
+    def get(self):
+
+        # Getting admin id from jwt
+        admin_id = get_jwt_identity()
+
+        # Getting claims from jwt
+        claims = get_jwt()
+
+        # Checking if the role in claims is 'admin'
+        if claims['role'] != 'admin':
+            return {'error': 'Unauthorized'}, 403
+
+        
+        admin = Admin.query.filter_by(id=admin_id).first()
+
+        if not admin:
+            return {'error': 'Admin not found'}, 404
+
+        return {
+            'message': 'Session is valid',
+            'admin':   admin.to_dict()
+        }, 200
+
+
 class AdminProfile(Resource):
     @jwt_required()
     def get(self):
