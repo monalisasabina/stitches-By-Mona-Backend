@@ -11,6 +11,7 @@ BLOCKLIST = set()  # This should be imported from your main application context 
 class AdminRegister(Resource):
     @jwt_required()
     def post(self):
+
         identity = get_jwt_identity()
 
         claims = get_jwt()
@@ -233,6 +234,7 @@ class AdminUpdate(Resource):
 
 class AdminChangePassword(Resource):
     @jwt_required()
+
     def patch(self):
 
         # Get the logged-in admin's identity from the JWT
@@ -284,5 +286,7 @@ class AdminLogout(Resource):
     @jwt_required()
     def post(self):
         jti = get_jwt()['jti']  # Get the unique identifier for the JWT
+
         BLOCKLIST.add(jti)  # Add the jti to the blocklist to revoke the token
+        
         return {'message': 'Admin logged out successfully'}, 200
