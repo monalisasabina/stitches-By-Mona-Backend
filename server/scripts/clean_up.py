@@ -12,6 +12,9 @@ with app.app_context():
     # Delete all records from the Admin table except for the super admin
     db.session.query(Admin).filter(Admin.is_super_admin == False).delete()
 
+    #Delete all
+    # db.session.query(Admin).delete()
+
 
     # Delete all records from the tables
     db.session.query(OrderItem).delete()

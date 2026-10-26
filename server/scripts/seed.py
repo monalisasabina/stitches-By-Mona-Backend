@@ -60,14 +60,64 @@ with app.app_context():
 
     # ── ADMINS ─────────────────────────────────────────
     print("🌱 Seeding admins...")
+    
     admins = [
-        Admin(firstname="Amara",   lastname="Odhiambo", username="amara",   email="amara@email.com",    password_hash=generate_password_hash("Amara123!"),  is_super_admin=False),
-        Admin(firstname="Brian",   lastname="Kamau",    username="brian",   email="brian@email.com",    password_hash=generate_password_hash("Brian123!"),  is_super_admin=False),
-        Admin(firstname="Cynthia", lastname="Wanjiku",  username="cynthia", email="cynthia@email.com",  password_hash=generate_password_hash("Cynthia123!"),  is_super_admin=False),
-        Admin(firstname="David",   lastname="Otieno",   username="david",   email="david@email.com",    password_hash=generate_password_hash("David123!"),  is_super_admin=False),
-        Admin(firstname="Esther",  lastname="Muthoni",  username="esther",  email="esther@email.com",   password_hash=generate_password_hash("Esther123!"),  is_super_admin=False),
+        Admin(
+            firstname="Amara",
+            lastname="Odhiambo",
+            username="amara",
+            email="amara@email.com",
+            phone="0700000001",
+            password_hash=generate_password_hash("Amara123!"),
+            is_super_admin=False,
+            is_active=False
+        ),
 
+        Admin(
+            firstname="Brian",
+            lastname="Kamau",
+            username="brian",
+            email="brian@email.com",
+            phone="0700000002",
+            password_hash=generate_password_hash("Brian123!"),
+            is_super_admin=False,
+            is_active=False
+        ),
+
+        Admin(
+            firstname="Cynthia",
+            lastname="Wanjiku",
+            username="cynthia",
+            email="cynthia@email.com",
+            phone="0700000003",
+            password_hash=generate_password_hash("Cynthia123!"),
+            is_super_admin=False,
+            is_active=False
+        ),
+
+        Admin(
+            firstname="David",
+            lastname="Otieno",
+            username="david",
+            email="david@email.com",
+            phone="0700000004",
+            password_hash=generate_password_hash("David123!"),
+            is_super_admin=False,
+            is_active=False
+        ),
+
+        Admin(
+            firstname="Esther",
+            lastname="Muthoni",
+            username="esther",
+            email="esther@email.com",
+            phone="0700000005",
+            password_hash=generate_password_hash("Esther123!"),
+            is_super_admin=False,
+            is_active=False
+        ),
     ]
+
     db.session.add_all(admins)
     db.session.commit()
 

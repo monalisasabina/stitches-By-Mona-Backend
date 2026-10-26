@@ -38,6 +38,7 @@ class AdminRegister(Resource):
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
+        phone = data.get('phone')
 
         # Required fields
         if not firstname or not lastname:
@@ -49,6 +50,11 @@ class AdminRegister(Resource):
             return {
                 'error': 'email is required'
             }, 400
+
+        if not phone:
+                    return {
+                        'error': 'phone is required'
+                    }, 400
 
         if not username:
             return {
@@ -90,6 +96,7 @@ class AdminRegister(Resource):
             lastname       = data.get('lastname'),
             username       = data.get('username'),
             email          = data.get('email'),
+            phone          = data.get('phone'),
             is_super_admin = False,  # staff are never super admin
         )
         new_admin.set_password(data.get('password'))
@@ -119,6 +126,9 @@ class AdminLogin(Resource):
 
         if not admin or not admin.check_password(password):
             return {'error': 'invalid email or password'}, 401
+
+        if not admin.is_active:
+            return {'error': 'Admin account is not active'}, 403
 
         token = create_access_token(
             identity=str(admin.id),   # just the ID
@@ -162,6 +172,7 @@ class AdminCheckSession(Resource):
         }, 200
 
 
+
 class AdminProfiles(Resource):
     @jwt_required()
     def get(self):
@@ -198,6 +209,7 @@ class AdminProfile(Resource):
             return {'error': 'Admin not found'}, 404
 
         return admin.to_dict(), 200
+    
 
 class AdminUpdate(Resource):
     @jwt_required()
@@ -213,7 +225,7 @@ class AdminUpdate(Resource):
         if claims.get('role') != 'admin':
             return {'error': 'Unauthorized'}, 403
 
-        admin = Admin.query.filter_by(id=admin-id).first()
+        admin = Admin.query.filter_by(id=admin_id).first()
     
         if not admin:
             return {'error': 'Admin not found'}, 404
@@ -246,11 +258,90 @@ class AdminUpdate(Resource):
                 return {'error': 'An admin with that email already exists'}, 409
     
             admin.email            = data['email']
+
+        # phone
+            if 'email'            in data: 
+        
+                # checking if email exists for another customer
+                existing_phone = Admin.query.filter_by(phone=data['phone']).first()
+                if existing_phone and existing_phone.id != id:
+                    return {'error': 'An admin with that phone already exists'}, 409
+        
+                admin.phone            = data['phone']
+
+        
     
         db.session.commit()
     
         return admin.to_dict(), 200
-    
+
+# Updating the admin's "is_active status"
+class AdminActivationStatus(Resource):
+    @jwt_required()
+
+    def patch(self,admin_id):
+
+        # Identify the logged-in admin
+        identity = get_jwt_identity()
+
+        try:
+            # converting the id from string to integers
+            requester_id = int(identity)
+
+            # if id is missing or not an integer.
+        except (ValueError, TypeError):
+            return {"error": "Invalid admin identity"}, 401
+
+        # Find the logged-in admin in the database
+        requester = Admin.query.get(requester_id)
+
+        # if no admin matches the id in the database
+        if not requester:
+            return {"error": "Admin not found"}, 404
+
+        # Only the super admin can change account status
+        if not requester.is_super_admin:
+            return {
+                "error": "Not authorized to change admin status"
+            }, 403
+
+        # Find the admin whose status will change
+        admin = Admin.query.get(admin_id)
+
+        if not admin:
+            return {"error": "Admin not found"}, 404
+
+        data = request.get_json(silent=True) or {}
+        
+        is_active = data.get("is_active")
+
+
+        #  isinstance(): checks if an object belongs to a specific data type or class
+        #  isinstance(object, classinfo) 
+        if not isinstance(is_active, bool):
+            return {
+                "error": "is_active must be true or false"
+            }, 400
+
+        # Prevent the super admin from deactivating themselves
+        if admin.id == requester.id and not is_active:
+            return {
+                "error": "You cannot deactivate your own account"
+            }, 400
+
+        # Update the status
+        admin.is_active = is_active
+        db.session.commit()
+
+        return {
+            "message": "Admin status updated successfully",
+            "admin": {
+                "id": admin.id,
+                "is_active": admin.is_active
+            }
+        }, 200
+
+        
 
 class AdminChangePassword(Resource):
     @jwt_required()
