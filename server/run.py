@@ -6,10 +6,11 @@ from flask_jwt_extended import JWTManager
 
 from models import db
 from config import Config
+from blocklist import BLOCKLIST
 
 
 migrate = Migrate()
-BLOCKLIST = set()
+
 
 def create_app():
     app = Flask(__name__)
@@ -41,9 +42,8 @@ def create_app():
 
     # Home endpoint 
     from routes.home import Home
-
     api.add_resource(Home, '/')
-
+    
 
     # Product endpoints
     from routes.products import Products, Products_By_ID, ProductByCategory

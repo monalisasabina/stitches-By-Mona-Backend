@@ -4,9 +4,9 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from datetime import timedelta
 from models import db
 from models.admin import Admin
+from blocklist import BLOCKLIST
 import re
 
-BLOCKLIST = set()  # This should be imported from your main application context where it's defined
 
 class AdminRegister(Resource):
     @jwt_required()
@@ -244,7 +244,8 @@ class AdminUpdate(Resource):
     
             # checking if username exists for another admin
             existing_username = Admin.query.filter_by(username=data['username']).first()
-            if existing_username and existing_username.id != id:
+
+            if existing_username and existing_username.id != admin_id:
                 return {'error': 'An admin with that username already exists'}, 409
     
             admin.username         = data['username']
@@ -254,17 +255,17 @@ class AdminUpdate(Resource):
     
             # checking if email exists for another customer
             existing_email = Admin.query.filter_by(email=data['email']).first()
-            if existing_email and existing_email.id != id:
+            if existing_email and existing_email.id != admin_id:
                 return {'error': 'An admin with that email already exists'}, 409
     
             admin.email            = data['email']
 
         # phone
-            if 'email'            in data: 
+            if 'phone'            in data: 
         
                 # checking if email exists for another customer
                 existing_phone = Admin.query.filter_by(phone=data['phone']).first()
-                if existing_phone and existing_phone.id != id:
+                if existing_phone and existing_phone.id != admin_id:
                     return {'error': 'An admin with that phone already exists'}, 409
         
                 admin.phone            = data['phone']
@@ -337,6 +338,7 @@ class AdminActivationStatus(Resource):
             "message": "Admin status updated successfully",
             "admin": {
                 "id": admin.id,
+                "firstname": admin.firstname,
                 "is_active": admin.is_active
             }
         }, 200
