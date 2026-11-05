@@ -12,6 +12,8 @@ flask-restful = "*"
 flask-cors = "*"
 flask-jwt-extended = "*"
 bcrypt = "*"
+itsdangerous = "*"
+flask-mail = "*"
 
 [dev-packages]
 
