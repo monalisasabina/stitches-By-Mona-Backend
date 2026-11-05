@@ -59,10 +59,6 @@ def create_app():
     api.add_resource(DeletedCustomers, '/customers/deleted')  # Endpoint to get deleted customers list
     api.add_resource(RestoreCustomer, '/customers/restore/<int:id>')  # Endpoint to restore a deleted customer
 
-    # Admin endpoints
-    from routes.admin import Admins, AdminDetail
-    api.add_resource(Admins, '/admins')
-    api.add_resource(AdminDetail, '/admins/<int:id>')
 
     # Order endpoints
     from routes.order import OrderList
