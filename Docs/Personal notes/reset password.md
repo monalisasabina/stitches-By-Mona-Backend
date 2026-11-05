@@ -47,7 +47,7 @@ utils/
 └── password_reset.py
 ```
 
-Check ```password_reset.py``` for the contents. ```__init.py`` is left blank..
+Check ```password_reset.py``` for the contents. ```__init.py``` is left blank..
 
 ---
 
