@@ -73,6 +73,7 @@ pipenv install Flask-Mail
 
 ```
 
+
 3. In ```.env``` add;
 
 ```bash
@@ -83,6 +84,53 @@ MAIL_USERNAME=your-email@gmail.com
 MAIL_PASSWORD=your-app-password
 
 ```
+
+4. Create a file called ```extension.py``` in server directory:
+
+```Python
+
+from flask_mail import Mail
+
+mail = Mail()
+
+```
+
+In ```run.py```:
+
+```python
+
+from extensions import mail
+
+def create_app()
+
+    ....
+
+    app.config.from_object(Config)
+
+    mail.init_app(app)
+
+    ....
+
+```
+
+5. Creating the routes
+
+Create ```auth_forget_reset_password.py``` file. Check the file for the code. 
+It should contain both the ```forget password resource``` and ```reset password resource```
+
+In ```run.py```:
+
+```python
+
+    from routes.auth_forget_reset_password import AdminForgotPassword, AdminResetPassword
+    api.add_resource(AdminForgotPassword, '/auth/admin/forgot-password')
+    api.add_resource(AdminResetPassword, '/auth/admin/reset-password')
+
+```
+
+
+
+
  
 
 

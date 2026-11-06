@@ -3,6 +3,7 @@ from flask_migrate import Migrate
 from flask_restful import Api
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from extensions import mail
 
 from models import db
 from config import Config
@@ -33,6 +34,10 @@ def create_app():
     # Checks if logged-out token is revoked by checking if its jti is in the BLOCKLIST
     # When a user logs out, their token's jti is added to the BLOCKLIST so that it can't be used again
     # This is a common way to handle logout with JWTs since JWTs are stateless
+
+    # Flask mail
+    app.config.from_object(Config)
+    mail.init_app(app)
 
     api = Api(app)
 
@@ -86,6 +91,11 @@ def create_app():
     api.add_resource(AdminUpdate, '/auth/admin/update')
     api.add_resource(AdminActivationStatus, '/auth/admin/profiles/<int:admin_id>/status')
     api.add_resource(AdminChangePassword, '/auth/admin/change-password')
+
+    # Admin forget/reset password
+    from routes.auth_forget_reset_password import AdminForgotPassword, AdminResetPassword
+    api.add_resource(AdminForgotPassword, '/auth/admin/forgot-password')
+    api.add_resource(AdminResetPassword, '/auth/admin/reset-password')
 
 
     # __customer___    Future use: Uncomment these lines to enable customer authentication routes
