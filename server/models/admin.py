@@ -48,8 +48,8 @@ class Admin(db.Model):
     def to_dict(self):
         return {
             'id':         self.id,
-            'firstname':  self.firstname,
-            'lastname':   self.lastname,
+            'firstname':  self.firstname.capitalize(),
+            'lastname':   self.lastname.capitalize(),
             'username':   self.username,
             'email':      self.email,
             'phone':      self.phone,
